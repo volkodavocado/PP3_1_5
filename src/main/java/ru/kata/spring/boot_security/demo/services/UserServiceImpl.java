@@ -10,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -33,20 +34,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     @Override
-    @Transactional
     public void removeById(Long id) {
         userRepository.delete(userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
-    @Transactional
     public void update(User user, Long id) {
         user.setId(id);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
